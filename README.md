@@ -35,4 +35,22 @@ FROM staging.sales_orders;
 ### Findings
 Approximately 0.2% of records contained empty strings in `order_date`. Missing order dates were retained because they did not affect the main sales and seasonality analyses.
 
-I also checked the discount_pct column and found empty strings there as well. The percentage of missing values was approximately 12.0%, which is significant for the analysis.
+### Problem
+I also checked the `discount_pct` column and found empty strings there as well. The percentage of missing values was approximately 12.0%, which is significant for the analysis. Furthermore, the `discount_pct` field was stored as text and contained percentage symbols as well as invalid entries. 
+
+### Approach
+I removed formatting characters, validated numeric values using regular expressions, and converted the field to a numeric format suitable for analysis. Invalid values were replaced with NULL to ensure data quality.
+```sql
+CREATE OR REPLACE VIEW sales_standardized AS
+SELECT *,
+    CASE 
+        WHEN TRIM(REPLACE(discount_pct, '%', '')) 
+             REGEXP '^[0-9]+(\\.[0-9]+)?$'
+        THEN CAST(
+            TRIM(REPLACE(discount_pct, '%', ''))
+            AS DECIMAL(5,2))
+        ELSE NULL
+    END AS discount_pct_clean
+FROM sales_cleaned;
+```
+### Findings
