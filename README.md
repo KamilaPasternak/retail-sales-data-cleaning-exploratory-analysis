@@ -1,4 +1,4 @@
-# Retail-Sales-Data-Cleaning-Exploratory-Analysis
+# Retail Sales - Data Cleaning [SQL]
 ## Skills Demonstrated
 
 * SQL Data Cleaning - missing values and duplicates
