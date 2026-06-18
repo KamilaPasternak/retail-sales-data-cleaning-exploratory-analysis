@@ -123,4 +123,45 @@ A standardized date column was created.
 
 ### 4. Country Standardization
 
+### Problem
+Country names appeared in multiple formats.
+
+Examples:
+
+<img width="131" height="178" alt="image" src="https://github.com/user-attachments/assets/de04f988-aaf2-4b92-a65a-0a5e4bdb79ba" />
+
+### Approach
+I selected and sorted distinct country names to identify inconsistencies and standardize the data using the query below.
+```sql
+CREATE OR REPLACE VIEW sales_clean AS
+    SELECT *,
+        CASE
+            WHEN LOWER(country) IN ('at' , 'austria') THEN 'Austria'
+            WHEN LOWER(country) IN ('cz' , 'czech', 'czech republic', 'czechia') THEN 'Czech Republic'
+            WHEN LOWER(country) IN ('de' , 'ger', 'germany', 'deutschland') THEN 'Germany'
+            WHEN LOWER(country) IN ('es' , 'spain') THEN 'Spain'
+            WHEN LOWER(country) IN ('fr' , 'france') THEN 'France'
+            WHEN LOWER(country) IN ('holland' , 'netherlands', 'nl') THEN 'Netherlands'
+            WHEN LOWER(country) IN ('it' , 'italy') THEN 'Italy'
+            WHEN LOWER(country) IN ('pl' , 'poland', 'polska', 'pol') THEN 'Poland'
+            WHEN LOWER(country) IN ('se' , 'sweden') THEN 'Sweden'
+            WHEN LOWER(country) IN ('sk' , 'slovak', 'slovakia') THEN 'Slovakia'
+            ELSE country
+        END AS country_clean
+    FROM
+        sales_with_date;
+```
+### Findings
+I checked the distinct values in the country column to ensure that only one standardized version of each country name remained. This is how the example dataset looks after the standardization process. 
+
+<img width="148" height="177" alt="image" src="https://github.com/user-attachments/assets/64ac86de-da1e-47b5-bd9c-02c32ed56deb" />
+
+In the same way, I standardized multiple status labels and merged them into three business-friendly categories.
+
+## SQL Analizing Process
+
+I started with preparing data and checkin for the outliers in `quantity` and `unit_price` column.
+
+
+<img width="1171" height="678" alt="image" src="https://github.com/user-attachments/assets/61df7abc-d62c-4cdd-ba86-e343f226940d" />
 
