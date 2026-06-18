@@ -1,5 +1,10 @@
 # Retail-Sales-Data-Cleaning-Exploratory-Analysis
-Performed data quality checks, data cleaning, SQL analyses, and data preparation for reporting.
+## Skills Demonstrated
+
+* SQL Data Cleaning - missing values and duplicates
+* Window Functions
+* Data Standardization - consistent format
+* Data Validation - outliers and invalid data
 
 ## Data Cleaning Process
 ### 1. Missing Values Assessment
@@ -158,10 +163,48 @@ I checked the distinct values in the country column to ensure that only one stan
 
 In the same way, I standardized multiple status labels and merged them into three business-friendly categories.
 
-## SQL Analizing Process
+### 5. Value Normalization
 
-I started with preparing data and checkin for the outliers in `quantity` and `unit_price` column.
+I started by preparing the data and checking for outliers in the `quantity` and `unit_price` columns.
+```sql
+SELECT 
+    MIN(quantity),
+    MAX(quantity),
+    MIN(unit_price),
+    MAX(unit_price)
+FROM
+    sales_standardized;
+```
+<img width="477" height="53" alt="image" src="https://github.com/user-attachments/assets/c35fd201-c6ba-4141-a221-527a76572099" />
 
+### Problem
+The minimum values for both `quantity` and `unit_price` were 0, which do not make sense for further analysis. Therefore, it was necessary to apply a condition ensuring that `quantity` is greater or equal than 1 and `unit_price` is greater than 0.
 
+However, these results alone did not provide much insight into potential outliers, as the distribution of the data was still unknown. 
+
+### Approach
+I exported the dataset to a CSV file and created histograms for both columns.
+
+### Findings
 <img width="1171" height="678" alt="image" src="https://github.com/user-attachments/assets/61df7abc-d62c-4cdd-ba86-e343f226940d" />
 
+The histogram shows that most observations fall between 0 and 10, while a small number of potential outliers in `quantity` can be observed around the value of 600.
+
+<img width="1233" height="644" alt="image" src="https://github.com/user-attachments/assets/db38c3c1-df6f-4226-8473-1be84a3bbee7" />
+
+This histogram appears to be approximately normally distributed, with no obvious or significant outliers.
+
+At this point, I could use the following query to filter out outliers, resulting in a cleaned dataset ready for further analysis.
+```sql
+CREATE OR REPLACE VIEW sales_analysis AS
+    SELECT *
+    FROM
+        sales_standardized
+    WHERE
+        quantity BETWEEN 1 AND 100
+            AND unit_price > 0;
+```
+## Conclusion
+The raw datasets contained several common data quality issues, including duplicate records, inconsistent date formats, non-standardized categorical values, and missing data.
+
+As a result, a clean and reliable analytical dataset was created, providing a solid foundation for further sales, pricing, seasonality, and inventory analysis.
