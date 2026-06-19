@@ -7,7 +7,8 @@
 * Data Validation - outliers and invalid data
 
 ## Data Cleaning Process
-### 1. Missing Values Assessment
+
+## 1. Missing Values Assessment
 
 The first step was to evaluate data completeness across the sales, products, and inventory tables.
 ```sql
@@ -73,7 +74,7 @@ Despite NULL values still representing approximately 12% of the dataset, the ana
 
 The remaining columns examined, including `launch_date`, `base_price`, and `last_stock_update`, had a negligible level of missing data that was not considered significant for further analysis.
 
-### 2. Duplicate Removing
+## 2. Duplicate Removing
 
 I started by identifying duplicate transactions using the query below.
 ```sql
@@ -100,7 +101,7 @@ FROM (
 WHERE rn = 1;
 ```
 
-### 3. Date Standardization
+## 3. Date Standardization
 
 ### Problem
 The dataset contained multiple date formats.
@@ -134,7 +135,7 @@ A standardized date column was created.
 
 <img width="137" height="174" alt="image" src="https://github.com/user-attachments/assets/f3a9456f-4e3b-4f42-8e09-58ba54b1bb2d" />
 
-### 4. Country Standardization
+## 4. Country Standardization
 
 ### Problem
 Country names appeared in multiple formats.
@@ -171,7 +172,7 @@ I checked the distinct values in the country column to ensure that only one stan
 
 In the same way, I standardized multiple status labels and merged them into three business-friendly categories.
 
-### 5. Value Normalization
+## 5. Value Normalization
 
 I started by preparing the data and checking for outliers in the `quantity` and `unit_price` columns.
 ```sql
