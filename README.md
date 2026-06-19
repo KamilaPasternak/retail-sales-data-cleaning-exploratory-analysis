@@ -17,6 +17,8 @@ SELECT
     COUNT(discount_pct) AS not_null_discount
 FROM staging.sales_orders;
 ```
+<img width="416" height="65" alt="image" src="https://github.com/user-attachments/assets/f637d742-0259-446f-8431-5f7cf26cc64e" />
+
 No null values were found in the `order_date` and `discount_pct` field in `sales_orders` table.
 Next, I checked `order_date` column for the number of empty strings.
 ```sql
@@ -25,6 +27,8 @@ SELECT
     SUM(CASE WHEN order_date = '' then 1 else 0 end) AS EMPTY_STRINGS
 FROM staging.sales_orders;
 ```
+<img width="267" height="55" alt="image" src="https://github.com/user-attachments/assets/1a48ce5a-d8db-4131-a5ba-fe2275b1fc12" />
+
 ### Problem
 The dataset contained empty strings in the `order_date` column.
 
@@ -37,16 +41,20 @@ SELECT
    ROUND(100.0*SUM(CASE WHEN order_date IS NULL OR order_date = '' then 1 else 0 end)/COUNT(*),2) AS PERCENT
 FROM staging.sales_orders;
 ```
+<img width="317" height="61" alt="image" src="https://github.com/user-attachments/assets/6ee0a71f-c9dd-4c88-bae9-ceb96dbf1694" />
+
 ### Findings
-Approximately 0.2% of records contained empty strings in `order_date`. Missing order dates were retained because they did not affect the main sales and seasonality analyses.
+Approximately 0.24% of records contained empty strings in `order_date`. Missing order dates were retained because they did not affect the main sales and seasonality analyses.
 
 I also examined the `discount_pct` column for the presence of empty strings.
 
+<img width="342" height="52" alt="image" src="https://github.com/user-attachments/assets/ead1c1f0-a0ac-449b-a353-d5957c6985b5" />
+
 ### Problem
-I also checked the `discount_pct` column and found empty strings there as well. The percentage of missing values was approximately 12.0%, which is significant for the analysis. Furthermore, the `discount_pct` field was stored as text and contained percentage symbols as well as invalid entries. 
+I also found empty strings there as well. The percentage of missing values was approximately 12.0%, which is significant for the analysis. Furthermore, the `discount_pct` field was stored as text and contained percentage symbols as well as invalid entries. 
 
 ### Approach
-I removed formatting characters, validated numeric values using regular expressions, and converted the field to a numeric format suitable for analysis. Invalid values were replaced with NULL to ensure data quality.
+I removed formatting characters, validated numeric values using regular expressions, and converted the field to a numeric format suitable for analysis. Missing values were replaced with NULL to ensure data quality.
 ```sql
 CREATE OR REPLACE VIEW sales_standardized AS
 SELECT *,
