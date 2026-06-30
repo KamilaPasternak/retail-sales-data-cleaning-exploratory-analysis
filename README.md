@@ -106,7 +106,7 @@ WHERE rn = 1;
 ### Problem
 The dataset contained multiple date formats.
 
-Examples:
+The following example show the dataset before standardization.
 
 <img width="138" height="173" alt="image" src="https://github.com/user-attachments/assets/246dc13c-2a3d-4c0c-9924-fd9cf91374bd" />
 
@@ -131,7 +131,7 @@ SELECT *,
 FROM sales_dedup;
 ```
 ### Findings
-A standardized date column was created.
+A standardized date column was created. This is how it looks after standardization:
 
 <img width="137" height="174" alt="image" src="https://github.com/user-attachments/assets/f3a9456f-4e3b-4f42-8e09-58ba54b1bb2d" />
 
@@ -140,7 +140,7 @@ A standardized date column was created.
 ### Problem
 Country names appeared in multiple formats.
 
-Examples:
+Examples before standardization:
 
 <img width="131" height="178" alt="image" src="https://github.com/user-attachments/assets/de04f988-aaf2-4b92-a65a-0a5e4bdb79ba" />
 
@@ -197,7 +197,8 @@ I exported the dataset to a CSV file and created histograms for both columns.
 ### Findings
 <img width="1171" height="678" alt="image" src="https://github.com/user-attachments/assets/61df7abc-d62c-4cdd-ba86-e343f226940d" />
 
-The histogram shows that most observations fall between 0 and 10, while a small number of potential outliers in `quantity` can be observed around the value of 600.
+The histogram shows that most observations fall between 0 and 10, while a small number of potential outliers in `quantity` can be observed around the value of 600. 
+The outliers should be examined to determine whether they were caused by data collection errors or whether they represent valid data. Since I could not verify this, I decided to exclude them from the following analysis.
 
 <img width="1233" height="644" alt="image" src="https://github.com/user-attachments/assets/db38c3c1-df6f-4226-8473-1be84a3bbee7" />
 
